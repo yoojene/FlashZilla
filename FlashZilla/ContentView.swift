@@ -8,26 +8,26 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var currentAmount = 0.0
+    @State private var finalAmount = 1.0
+    
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
-                .onTapGesture(count: 2) {
-                    print("double tapped")
-                }
-                .padding(.bottom)
-
-            Text("Hello, Long press!")
-                .onLongPressGesture(minimumDuration: 2) {
-                    print("Long pressed")
-                } onPressingChanged: { inProgress in
-                    print("in progress \(inProgress)")
-                }
-
-        }
+        
+        Text("Hello, Zoom in!")
+            .scaleEffect(finalAmount + currentAmount)
+            .gesture(
+                MagnificationGesture()
+                    .onChanged { amount in
+                        currentAmount = amount - 1
+                    }
+                    .onEnded { amount in
+                        finalAmount += currentAmount
+                        currentAmount = 0
+                    }
+            )
     }
+    
 }
 
 struct ContentView_Previews: PreviewProvider {
