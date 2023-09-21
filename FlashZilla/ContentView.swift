@@ -15,7 +15,7 @@ struct ContentView: View {
                 .onTapGesture {
                     print("text tapped")
                 }
-        }.highPriorityGesture( // to ensure outer view's gesture is called.
+        }.simultaneousGesture( // to ensure parent and child gestures are called
             TapGesture().onEnded {
                 print("vstack tapped")
             }
