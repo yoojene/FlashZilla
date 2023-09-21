@@ -21,10 +21,10 @@ struct ContentView: View {
             Circle()
                 .fill(.red)
                 .frame(width: 300, height: 300)
+                .contentShape(Rectangle()) // the tap gesture will work on the rectangle too
                 .onTapGesture {
                     print("Circle tapped!")
                 }
-                .allowsHitTesting(false) // will prevent tap events on the view
         }
     }
   
