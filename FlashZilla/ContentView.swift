@@ -8,27 +8,23 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @State private var currentAmount = Angle.zero
-    @State private var finalAmount = Angle.zero
-    
+   
     var body: some View {
+        VStack {
+            Text("Hello, world!")
+                .onTapGesture {
+                    print("text tapped")
+                }
+        }.highPriorityGesture( // to ensure outer view's gesture is called.
+            TapGesture().onEnded {
+                print("vstack tapped")
+            }
+        )
         
-        Text("Hello, Rotate in!")
-            .rotationEffect(finalAmount + currentAmount)
-            .gesture(
-                RotationGesture()
-                    .onChanged { angles in
-                        currentAmount = angles
-                    }
-                    .onEnded { angles in
-                        finalAmount += currentAmount
-                        currentAmount = .zero
-                    }
-            )
     }
-    
+
 }
+    
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
