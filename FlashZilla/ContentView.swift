@@ -8,18 +8,40 @@
 import SwiftUI
 
 struct ContentView: View {
+    
+    @State private var offset = CGSize.zero
+    @State private var isDragging = false
    
     var body: some View {
-        VStack {
-            Text("Hello, world!")
-                .onTapGesture {
-                    print("text tapped")
-                }
-        }.simultaneousGesture( // to ensure parent and child gestures are called
-            TapGesture().onEnded {
-                print("vstack tapped")
+        
+        let dragGesture = DragGesture()
+            .onChanged { value in
+                offset = value.translation
             }
-        )
+            .onEnded { _ in
+                withAnimation {
+                    offset = .zero
+                    isDragging = false
+                }
+            }
+
+        let pressedGesture = LongPressGesture()
+            .onEnded { value in
+                withAnimation {
+                    isDragging = true
+                }
+            }
+        
+        let combined = pressedGesture.sequenced(before: dragGesture)
+        
+        
+        Circle()
+            .fill(.red)
+            .frame(width: 64, height: 64)
+            .scaleEffect(isDragging ? 1.5 : 1)
+            .offset(offset)
+            .gesture(combined)
+        
         
     }
 
