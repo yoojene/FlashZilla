@@ -14,8 +14,19 @@ struct ContentView: View {
                 .imageScale(.large)
                 .foregroundColor(.accentColor)
             Text("Hello, world!")
+                .onTapGesture(count: 2) {
+                    print("double tapped")
+                }
+                .padding(.bottom)
+
+            Text("Hello, Long press!")
+                .onLongPressGesture(minimumDuration: 2) {
+                    print("Long pressed")
+                } onPressingChanged: { inProgress in
+                    print("in progress \(inProgress)")
+                }
+
         }
-        .padding()
     }
 }
 
