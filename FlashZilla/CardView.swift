@@ -12,6 +12,8 @@ struct CardView: View {
     let card: Card
     var removal: (() -> Void)? = nil // this is how to add an optional? trailing closure to our CardView struct.  Add it after the initial card param
     
+    @State private var feedback = UINotificationFeedbackGenerator()
+    
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @State private var showingAnswer = false
     @State private var offset = CGSize.zero
@@ -56,10 +58,17 @@ struct CardView: View {
             DragGesture()
                 .onChanged { gesture in
                     offset = gesture.translation
+                    if offset.width < 0 {
+                        feedback.prepare()
+                    }
                 }
                 .onEnded { _ in
                     if abs(offset.width) > 100 {
-                       removal?()
+                        if offset.width < 0 {
+                            feedback.notificationOccurred(.error)
+                        }
+                       
+                        removal?()
                     } else {
                         offset = .zero
                     }
