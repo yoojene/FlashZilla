@@ -16,6 +16,8 @@ extension View {
 }
 
 struct ContentView: View {
+    let savePath = FileManager.documentsDirectory.appendingPathComponent("cards.json")
+
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
     @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     @State private var cards = [Card]()
@@ -163,10 +165,12 @@ struct ContentView: View {
      }
     
     func loadData() {
-        if let data = UserDefaults.standard.data(forKey: "Cards") {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-            }
+        do {
+            let data = try Data(contentsOf: savePath)
+            cards = try JSONDecoder().decode([Card].self, from: data)
+            
+        } catch {
+            cards = []
         }
     }
     

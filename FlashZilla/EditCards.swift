@@ -8,7 +8,8 @@
 import SwiftUI
 
 struct EditCards: View {
-    
+    let savePath = FileManager.documentsDirectory.appendingPathComponent("cards.json")
+
     @Environment(\.dismiss) var dismiss
     @State private var cards = [Card]()
     @State private var newPrompt = ""
@@ -73,16 +74,22 @@ struct EditCards: View {
     }
     
     func loadData() {
-        if let data = UserDefaults.standard.data(forKey: "Cards") {
-            if let decoded = try? JSONDecoder().decode([Card].self, from: data) {
-                cards = decoded
-            }
+        do {
+            let data = try Data(contentsOf: savePath)
+            cards = try JSONDecoder().decode([Card].self, from: data)
+            
+        } catch {
+            cards = []
         }
     }
     
     func saveData() {
-        if let data = try? JSONEncoder().encode(cards) {
-            UserDefaults.standard.set(data, forKey: "Cards")
+        if let encoded = try? JSONEncoder().encode(cards) {
+            do {
+                try encoded.write(to: savePath) // encoded is type Data
+            } catch {
+                print("Error is \(error.localizedDescription)")
+            }
         }
             
     }
