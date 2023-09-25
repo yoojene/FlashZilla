@@ -8,13 +8,14 @@
 import SwiftUI
 
 
-//func withOptionalAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
-//    if UIAccessibility.isReduceMotionEnabled {
-//        return try body()
-//    } else {
-//        return try withAnimation(animation, body)
-//    }
-//}
+// wrapper on UIKit UIAccessibility makes the code simpler
+func withOptionalAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+    if UIAccessibility.isReduceMotionEnabled {
+        return try body()
+    } else {
+        return try withAnimation(animation, body)
+    }
+}
 
 struct ContentView: View {
     
@@ -26,18 +27,11 @@ struct ContentView: View {
         Text("Success")
             .scaleEffect(scale)
             .onTapGesture {
-                if reduceMotion {
+                withOptionalAnimation {
                     scale *= 1.5
-                } else {
-                    withAnimation {
-                        scale *= 1.5
-                    }
                 }
             }
-       
-        
-            
-    }
+        }
   
 }
     
