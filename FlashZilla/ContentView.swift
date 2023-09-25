@@ -47,16 +47,26 @@ struct ContentView: View {
                     .clipShape(Capsule())
                     
                 ZStack {
-                    ForEach(0..<cards.count, id: \.self) { index in
-                        CardView(card: cards[index]) {
-                            withAnimation {
-                                removeCard(at: index)
-                            }
-                            
+                    ForEach(Array(cards.enumerated()), id: \.offset) { offset, card in
+                        CardView(card: card) { correct in
+                            print("in closure in content view")
+//                            if correct == true {
+                                withAnimation {
+                                    removeCard(at: offset)
+                                }
+//                            } else {
+//                                let wrongCard = cards.remove(at: offset)
+//                                let newCard = Card(id: UUID(), prompt: wrongCard.prompt, answer: wrongCard.prompt)
+//                                cards.insert(newCard, at: 0)
+//                                print("inserted a new card")
+//                                print("Noting")
+
+//                            }
+                           
                         }
-                        .stacked(at: index, in: cards.count)
-                        .allowsHitTesting(index == cards.count - 1)
-                        .accessibilityHidden(index < cards.count - 1)
+                        .stacked(at: offset, in: cards.count)
+                        .allowsHitTesting(offset == cards.count - 1)
+                        .accessibilityHidden(offset < cards.count - 1)
                     }
                 }
                 .allowsHitTesting(timeRemaining > 0)
@@ -172,6 +182,20 @@ struct ContentView: View {
         isActive = true
         loadData()
     }
+    
+    
+    // Closure for CardView
+//    let removal = { (correct: Bool) in
+//        if correct {
+//            withAnimation {
+//                removeCard(at: offset)
+//            }
+//        } else {
+//            let wrongCard = cards.remove(at: offset)
+//            cards.insert(wrongCard, at: 0)
+//        }
+//
+//    }
 
 }
 

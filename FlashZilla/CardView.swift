@@ -19,7 +19,7 @@ extension Shape {
 struct CardView: View {
     
     let card: Card
-    var removal: (() -> Void)? = nil // this is how to add an optional? trailing closure to our CardView struct.  Add it after the initial card param
+    var removal: ((_ correct: Bool) -> Void)? = nil // this is how to add an optional? trailing closure to our CardView struct.  Add it after the initial card param
     
     @State private var feedback = UINotificationFeedbackGenerator()
     
@@ -80,12 +80,15 @@ struct CardView: View {
                     }
                 }
                 .onEnded { _ in
+                    var correct = true
                     if abs(offset.width) > 100 {
                         if offset.width < 0 {
                             feedback.notificationOccurred(.error)
+                            correct = false
+                            print("Here")
                         }
-                       
-                        removal?()
+                        print("About to call closure removal")
+                        removal?(correct)
                     } else {
                         offset = .zero
                     }
