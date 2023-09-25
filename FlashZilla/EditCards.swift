@@ -20,7 +20,7 @@ struct EditCards: View {
                 Section("Add new card") {
                     TextField("Prompt", text: $newPrompt)
                     TextField("Answer",  text: $newAnswer)
-                    Button("Add card",action: addCard)
+                    Button("Add card", action: addCard)
                 }
                 Section {
                     ForEach(cards) { card in
@@ -64,7 +64,11 @@ struct EditCards: View {
         guard trimmedPrompt.isEmpty == false && trimmedAnswer.isEmpty == false else { return }
         let card = Card(id: UUID(), prompt: trimmedPrompt, answer: trimmedAnswer)
         cards.insert(card, at: 0)
+        
         saveData()
+        
+        newPrompt = ""
+        newAnswer = ""
         
     }
     
