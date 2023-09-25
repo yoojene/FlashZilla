@@ -8,21 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
-    
-    @Environment(\.accessibilityReduceTransparency) var reduceTransparency
 
     var body: some View {
-       
-        Text("Success")
-            .padding()
-            .background(reduceTransparency ? .black : .black.opacity(0.5))
-            .foregroundColor(.white)
-            .clipShape(Capsule())
-            
-        }
-  
+        CardView(card: Card.example)
+     }
+
 }
-    
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
