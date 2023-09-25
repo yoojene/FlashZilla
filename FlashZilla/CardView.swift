@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+// Day 91 Challenge 2
+// Couldn't use a ViewModifier as they expect to return some View not Shape.
+// Use an extension on Shape directly
+extension Shape {
+    func cardFillStyle(_ offset: CGSize) -> some View {
+        fill(offset.width > 0 ? Color.green : offset.width == 0 ? Color.white : Color.red)
+    }
+}
+
 struct CardView: View {
     
     let card: Card
@@ -32,7 +41,7 @@ struct CardView: View {
                     differentiateWithoutColor
                     ? nil
                     : RoundedRectangle(cornerRadius: 25, style: .continuous)
-                        .fill(offset.width > 0 ? .green : .red)
+                        .cardFillStyle(offset)
                 )
                 .shadow(radius: 10)
             

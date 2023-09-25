@@ -167,7 +167,7 @@ struct ContentView: View {
     }
     
     func resetCards() {
-
+        
         timeRemaining = 100
         isActive = true
         loadData()
