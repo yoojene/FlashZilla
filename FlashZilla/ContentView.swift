@@ -9,22 +9,22 @@ import SwiftUI
 
 struct ContentView: View {
     
-    @Environment(\.scenePhase) var scenePhase
+    @Environment(\.accessibilityDifferentiateWithoutColor) var accessibilityDifferentiateWithoutColor
 
     var body: some View {
-        Text("Hello world")
-            .padding()
-            .onChange(of: scenePhase) { newPhase in
-                if newPhase == .active {
-                    print("Active")
-                } else if newPhase == .inactive {
-                    print("Inactive")
-                } else if newPhase == .background {
-                    print("Background")
-                }
+        HStack {
+            if accessibilityDifferentiateWithoutColor {
+                Image(systemName: "checkmark.circle")
             }
+            
+            Text("Success")
+        }
+        .padding()
+        .background(accessibilityDifferentiateWithoutColor ? .black : .green)
+        .foregroundColor(.white)
+        .clipShape(Capsule())
         
-        
+            
     }
   
 }
