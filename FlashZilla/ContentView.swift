@@ -47,26 +47,29 @@ struct ContentView: View {
                     .clipShape(Capsule())
                     
                 ZStack {
-                    ForEach(Array(cards.enumerated()), id: \.offset) { offset, card in
+                    ForEach(cards) { card in
                         CardView(card: card) { correct in
                             print("in closure in content view")
-//                            if correct == true {
+                            print(correct)
+                            if correct == true {
                                 withAnimation {
-                                    removeCard(at: offset)
+                                    removeCard(at: getIndex(of: card))
                                 }
-//                            } else {
-//                                let wrongCard = cards.remove(at: offset)
-//                                let newCard = Card(id: UUID(), prompt: wrongCard.prompt, answer: wrongCard.prompt)
-//                                cards.insert(newCard, at: 0)
-//                                print("inserted a new card")
-//                                print("Noting")
-
-//                            }
-                           
+                            } else {
+                                print("incorrect")
+                                print(card)
+                                withAnimation {
+                                    let newCard = Card(id: UUID(), prompt: card.prompt, answer: card.answer)
+                                    print(newCard)
+                                    
+                                    cards.remove(at: getIndex(of: card))
+                                    cards.insert(newCard, at: 0)
+                                }
+                            }
                         }
-                        .stacked(at: offset, in: cards.count)
-                        .allowsHitTesting(offset == cards.count - 1)
-                        .accessibilityHidden(offset < cards.count - 1)
+                        .stacked(at: getIndex(of: card), in: cards.count)
+                        .allowsHitTesting(getIndex(of: card) == cards.count - 1)
+                        .accessibilityHidden(getIndex(of: card) < cards.count - 1)
                     }
                 }
                 .allowsHitTesting(timeRemaining > 0)
@@ -183,6 +186,15 @@ struct ContentView: View {
         loadData()
     }
     
+    
+    func getIndex(of card: Card) -> Int {
+        for i in 0...cards.count {
+            if cards[i].id == card.id {
+                return i
+            }
+        }
+        return -1
+    }
     
     // Closure for CardView
 //    let removal = { (correct: Bool) in
