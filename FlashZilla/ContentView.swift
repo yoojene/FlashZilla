@@ -7,22 +7,34 @@
 
 import SwiftUI
 
+
+//func withOptionalAnimation<Result>(_ animation: Animation? = .default, _ body: () throws -> Result) rethrows -> Result {
+//    if UIAccessibility.isReduceMotionEnabled {
+//        return try body()
+//    } else {
+//        return try withAnimation(animation, body)
+//    }
+//}
+
 struct ContentView: View {
     
-    @Environment(\.accessibilityDifferentiateWithoutColor) var accessibilityDifferentiateWithoutColor
+    @Environment(\.accessibilityReduceMotion) var reduceMotion
+    @State private var scale = 1.0
 
     var body: some View {
-        HStack {
-            if accessibilityDifferentiateWithoutColor {
-                Image(systemName: "checkmark.circle")
+       
+        Text("Success")
+            .scaleEffect(scale)
+            .onTapGesture {
+                if reduceMotion {
+                    scale *= 1.5
+                } else {
+                    withAnimation {
+                        scale *= 1.5
+                    }
+                }
             }
-            
-            Text("Success")
-        }
-        .padding()
-        .background(accessibilityDifferentiateWithoutColor ? .black : .green)
-        .foregroundColor(.white)
-        .clipShape(Capsule())
+       
         
             
     }
