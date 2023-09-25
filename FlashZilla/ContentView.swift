@@ -195,19 +195,6 @@ struct ContentView: View {
         }
         return -1
     }
-    
-    // Closure for CardView
-//    let removal = { (correct: Bool) in
-//        if correct {
-//            withAnimation {
-//                removeCard(at: offset)
-//            }
-//        } else {
-//            let wrongCard = cards.remove(at: offset)
-//            cards.insert(wrongCard, at: 0)
-//        }
-//
-//    }
 
 }
 
