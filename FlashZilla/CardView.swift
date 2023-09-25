@@ -85,9 +85,7 @@ struct CardView: View {
                         if offset.width < 0 {
                             feedback.notificationOccurred(.error)
                             correct = false
-                            print("Here")
                         }
-                        print("About to call closure removal")
                         removal?(correct)
                     } else {
                         offset = .zero
