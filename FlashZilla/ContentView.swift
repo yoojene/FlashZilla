@@ -51,19 +51,13 @@ struct ContentView: View {
                 ZStack {
                     ForEach(cards) { card in
                         CardView(card: card) { correct in
-                            print("in closure in content view")
-                            print(correct)
                             if correct == true {
                                 withAnimation {
                                     removeCard(at: getIndex(of: card))
                                 }
                             } else {
-                                print("incorrect")
-                                print(card)
                                 withAnimation {
                                     let newCard = Card(id: UUID(), prompt: card.prompt, answer: card.answer)
-                                    print(newCard)
-                                    
                                     cards.remove(at: getIndex(of: card))
                                     cards.insert(newCard, at: 0)
                                 }
@@ -190,7 +184,7 @@ struct ContentView: View {
         loadData()
     }
     
-    
+    // https://www.hackingwithswift.com/forums/100-days-of-swiftui/solved-day-91-3-challenge-reinserting-card-if-wrong/23765
     func getIndex(of card: Card) -> Int {
         for i in 0...cards.count {
             if cards[i].id == card.id {
