@@ -10,8 +10,12 @@ import SwiftUI
 struct CardView: View {
     
     let card: Card
+    var removal: (() -> Void)? = nil // this is how to add an optional? trailing closure to our CardView struct.  Add it after the initial card param
+    
     
     @State private var showingAnswer = false
+    @State private var offset = CGSize.zero
+    
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 25, style: .continuous)
@@ -34,6 +38,22 @@ struct CardView: View {
             .multilineTextAlignment(.center)
         }
         .frame(width: 450, height: 250)
+        .rotationEffect(.degrees(Double(offset.width / 5))) // small amount 1/5 of width of rotation
+        .offset(x: offset.width * 5, y: 0) // * 5 to make the gesture more sensitive
+        .opacity(2 - Double(abs(offset.width / 50 ))) //abs converts the -ve to +ve, to account for left swiping
+        .gesture(
+            DragGesture()
+                .onChanged { gesture in
+                    offset = gesture.translation
+                }
+                .onEnded { _ in
+                    if abs(offset.width) > 100 {
+                       removal?()
+                    } else {
+                        offset = .zero
+                    }
+                }
+            )
         .onTapGesture {
             showingAnswer.toggle()
         }

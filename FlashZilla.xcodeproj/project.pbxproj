@@ -39,8 +39,6 @@
 		447D436C2ABCD3A800FE4A8E = {
 			isa = PBXGroup;
 			children = (
-				44D48B6A2AC190EB0097B883 /* CardView.swift */,
-				44D48B682AC190150097B883 /* Card.swift */,
 				447D43772ABCD3A800FE4A8E /* FlashZilla */,
 				447D43762ABCD3A800FE4A8E /* Products */,
 			);
@@ -57,6 +55,8 @@
 		447D43772ABCD3A800FE4A8E /* FlashZilla */ = {
 			isa = PBXGroup;
 			children = (
+				44D48B6A2AC190EB0097B883 /* CardView.swift */,
+				44D48B682AC190150097B883 /* Card.swift */,
 				447D43782ABCD3A800FE4A8E /* FlashZillaApp.swift */,
 				447D437A2ABCD3A800FE4A8E /* ContentView.swift */,
 				447D437C2ABCD3A900FE4A8E /* Assets.xcassets */,
