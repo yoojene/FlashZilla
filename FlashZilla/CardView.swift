@@ -15,6 +15,7 @@ struct CardView: View {
     @State private var feedback = UINotificationFeedbackGenerator()
     
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+    @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     @State private var showingAnswer = false
     @State private var offset = CGSize.zero
     
@@ -36,17 +37,23 @@ struct CardView: View {
                 .shadow(radius: 10)
             
             VStack {
-                Text(card.prompt)
-                    .font(.largeTitle)
-                    .foregroundColor(.black)
-                if showingAnswer {
-                    Text(card.answer)
-                        .font(.title)
-                        .foregroundColor(.gray)
+                if voiceOverEnabled {
+                    Text(showingAnswer ? card.answer : card.prompt)
+                        .font(.largeTitle)
+                        .foregroundColor(.black)
+                } else {
+                    Text(card.prompt)
+                        .font(.largeTitle)
+                        .foregroundColor(.black)
+                    if showingAnswer {
+                        Text(card.answer)
+                            .font(.title)
+                            .foregroundColor(.gray)
+                    }
                 }
+              
              
             }
-            
             .padding()
             .multilineTextAlignment(.center)
         }
@@ -54,6 +61,7 @@ struct CardView: View {
         .rotationEffect(.degrees(Double(offset.width / 5))) // small amount 1/5 of width of rotation
         .offset(x: offset.width * 5, y: 0) // * 5 to make the gesture more sensitive
         .opacity(2 - Double(abs(offset.width / 50 ))) //abs converts the -ve to +ve, to account for left swiping
+        .accessibilityAddTraits(.isButton)
         .gesture(
             DragGesture()
                 .onChanged { gesture in
@@ -77,6 +85,7 @@ struct CardView: View {
         .onTapGesture {
             showingAnswer.toggle()
         }
+        .animation(.spring(), value: offset)
     }
 }
 

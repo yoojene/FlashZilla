@@ -17,6 +17,7 @@ extension View {
 
 struct ContentView: View {
     @Environment(\.accessibilityDifferentiateWithoutColor) var differentiateWithoutColor
+    @Environment(\.accessibilityVoiceOverEnabled) var voiceOverEnabled
     @State private var cards = Array(repeating: Card.example, count: 10)
 
     @State private var timeRemaining = 100
@@ -52,6 +53,8 @@ struct ContentView: View {
                             
                         }
                         .stacked(at: index, in: cards.count)
+                        .allowsHitTesting(index == cards.count - 1)
+                        .accessibilityHidden(index < cards.count - 1)
                     }
                 }
                 .allowsHitTesting(timeRemaining > 0)
@@ -64,22 +67,39 @@ struct ContentView: View {
                         .clipShape(Capsule())
                 }
             }
-            if differentiateWithoutColor {
+            if differentiateWithoutColor || voiceOverEnabled {
                 VStack {
                     Spacer()
                     HStack {
-                        Image(systemName: "xmark.circle")
-                            .padding()
-                            .background(.black.opacity(0.7))
-                            .clipShape(Circle())
+                        Button {
+                            withAnimation {
+                                removeCard(at: cards.count - 1)
+                            }
+                        } label : {
+                            Image(systemName: "xmark.circle")
+                                .padding()
+                                .background(.black.opacity(0.7))
+                                .clipShape(Circle())
+                        }
+                        .accessibilityLabel("Wrong")
+                        .accessibilityHint("Mark your answer as being incorrect")
     
                     Spacer()
-                
-                    Image(systemName: "checkmark.circle")
-                        .padding()
-                        .background(.black.opacity(0.7))
-                        .clipShape(Circle())
-                    }
+                        
+                        Button {
+                            withAnimation {
+                                removeCard(at: cards.count - 1)
+                            }
+                        } label : {
+                            Image(systemName: "checkmark.circle")
+                                .padding()
+                                .background(.black.opacity(0.7))
+                                .clipShape(Circle())
+                            }
+                        }
+                        .accessibilityLabel("Correct")
+                        .accessibilityHint("Mark your answer as being correct")
+
                 }
                 .foregroundColor(.white)
                 .font(.largeTitle)
@@ -105,6 +125,7 @@ struct ContentView: View {
      }
     
     func removeCard(at index: Int) {
+        guard index>0 else { return }
         cards.remove(at: index)
         
         if cards.isEmpty {
